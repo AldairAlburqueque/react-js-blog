@@ -3,10 +3,14 @@ import "./App.css";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import Header from "./components/Headers";
 
 function App() {
   return (
     <div>
+      <div>
+        <Header />
+      </div>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth">
