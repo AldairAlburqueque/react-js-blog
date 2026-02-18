@@ -5,17 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/auth.slice";
 
 const Header = () => {
-  // const [name, setName] = useState("");
-
-  const user = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   const nameUser = localStorage.getItem("name");
-  //   if (nameUser) {
-  //     setName(nameUser);
-  //   }
-  // }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -24,68 +15,73 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-zinc-900 border-b border-zinc-700 font-mono">
+    <header className="bg-zinc-950 border-b border-zinc-800 font-mono sticky top-0 z-50 backdrop-blur">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo + Nombre */}
-        <div className="flex items-center gap-3">
-          <div className="border border-amber-400 p-1 text-amber-400">BC</div>
-          <h1 className="text-xl text-amber-400 tracking-wide">BlogCer</h1>
-        </div>
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="border border-amber-400 px-2 py-1 text-amber-400 font-bold tracking-widest group-hover:bg-amber-400 group-hover:text-black transition-all duration-300">
+            BC
+          </div>
+          <h1 className="text-xl text-amber-400 tracking-wider group-hover:text-amber-300 transition-colors">
+            BlogCer
+          </h1>
+        </Link>
 
         {/* Categorías */}
-        <nav className="hidden md:flex gap-6 text-sm text-zinc-300 m-4">
+        <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
           <Link
             to="/category/tech"
-            className="hover:text-amber-400 transition-colors"
+            className="hover:text-amber-400 transition-colors relative after:absolute after:-bottom-1 after:left-0 after:w-0 after:bg-amber-400 hover:after:w-full after:transition-all after:duration-300"
           >
             Tech
           </Link>
         </nav>
 
         {/* Buscador */}
-        <div className="hidden md:flex items-center bg-zinc-800 border border-zinc-700 px-3 py-1">
-          <Search size={16} className="text-zinc-400 mr-2" />
+        <div className="hidden md:flex items-center bg-zinc-900 border border-zinc-700 px-4 py-2 rounded-sm focus-within:border-amber-400 transition-all duration-300">
+          <Search size={16} className="text-zinc-500 mr-2" />
           <input
             type="text"
-            placeholder="Search..."
-            className="bg-transparent outline-none text-zinc-300 text-sm w-40"
+            placeholder="Search articles..."
+            className="bg-transparent outline-none text-zinc-300 text-sm w-48 placeholder:text-zinc-600"
           />
         </div>
 
         {/* Acciones */}
-        <div className="flex items-center gap-4">
-          {/* Perfil */}
-          <button className="text-zinc-400 hover:text-amber-400 transition-colors">
-            <User size={20} />
-          </button>
-
+        <div className="flex items-center gap-5">
           {!user ? (
-            <div>
-              {/* Sign In */}
+            <div className="flex items-center gap-4">
               <Link
                 to="/auth/login"
-                className="text-sm text-cyan-400 hover:text-amber-400 transition-colors"
+                className="text-sm text-zinc-400 hover:text-amber-400 transition-colors"
               >
-                SIGN_IN
+                SIGN IN
               </Link>
-              {/* Register */}
+
               <Link
                 to="/auth/register"
-                className="text-sm border border-amber-400 text-amber-400 px-3 py-1 
-                       hover:bg-amber-400 hover:text-black transition-colors"
+                className="text-sm border border-amber-400 text-amber-400 px-4 py-1.5 
+              hover:bg-amber-400 hover:text-black transition-all duration-300"
               >
                 REGISTER
               </Link>
             </div>
           ) : (
-            <div>
-              <div>{user}</div>
+            <div className="flex items-center gap-4">
+              {/* Avatar */}
+              <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-700 px-3 py-1.5">
+                <User size={16} className="text-amber-400" />
+                <span className="text-sm text-zinc-300 tracking-wide">
+                  {user}
+                </span>
+              </div>
+
               <button
                 onClick={handleLogout}
-                className="text-sm border border-amber-400 text-amber-400 px-3 py-1 
-                      hover:bg-amber-400 hover:text-black transition-colors"
+                className="text-sm border border-amber-400 text-amber-400 px-4 py-1.5 
+              hover:bg-amber-400 hover:text-black transition-all duration-300"
               >
-                Logout
+                LOGOUT
               </button>
             </div>
           )}

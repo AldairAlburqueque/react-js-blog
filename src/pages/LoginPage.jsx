@@ -25,7 +25,12 @@ const LoginPage = () => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("name", res.data.name);
 
-        dispatch(setUser(res.data.name));
+        dispatch(
+          setUser({
+            user: res.data.name,
+            token: res.data.token,
+          }),
+        );
         if (localStorage.getItem("token")) {
           navigate("/");
         }

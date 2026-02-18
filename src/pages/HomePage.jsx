@@ -1,5 +1,4 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBlogThunk } from "../store/slices/blogs.slice";
 import CardBlog from "../components/CardBlog";
