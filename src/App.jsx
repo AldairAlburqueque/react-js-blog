@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import Header from "./components/Headers";
+import ProtecteRoutes from "./pages/ProtecteRoutes";
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
+        <Routes element={<ProtecteRoutes />}>
+          <Route  path="/blog/create" element={<CreteBlog />}/>
+        </Routes> 
       </Routes>
     </div>
   );
