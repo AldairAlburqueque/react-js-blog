@@ -5,22 +5,22 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import Header from "./components/Headers";
 import ProtecteRoutes from "./pages/ProtecteRoutes";
+import { CreateBlog } from "./pages/CreateBlog";
 
 function App() {
   return (
     <div>
-      <div>
-        <Header />
-      </div>
+      <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth">
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-        <Routes element={<ProtecteRoutes />}>
-          <Route  path="/blog/create" element={<CreteBlog />}/>
-        </Routes> 
+        <Route element={<ProtecteRoutes />}>
+          <Route path="/blog/create" element={<CreateBlog />} />
+        </Route>
+        <Route path="/blog/category/:id" element={<HomePage />} />
       </Routes>
     </div>
   );

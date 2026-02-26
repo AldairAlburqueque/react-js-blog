@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const FormBlog = () => {
+  const [category, setCategory] = useState([]);
 
-  const [category, setCategory] = useState()
+  useEffect(() => {
+    const url = `http://localhost:8080/category/list`;
 
-  const handleCategory = () => {
-    const url = `http://localhost:8080/category/list`
-    axios.get(url)
+    console.log({ category });
+    axios
+      .get(url)
       .then((res) => setCategory(res.data))
-      .catch((err) => console.log(err))  
-  }
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div>
@@ -25,7 +28,11 @@ const FormBlog = () => {
         <div>
           <label htmlFor="">Categoría</label>
           <select>
-            <option value=""></option>
+            {category.map((cat) => (
+              <option value="" key={cat.id}>
+                {cat.categoria}
+              </option>
+            ))}
           </select>
         </div>
       </form>

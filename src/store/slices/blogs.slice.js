@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import config from "../../utils/getConfig";
 
 const blogSlice = createSlice({
   name: "blogs",
@@ -12,10 +13,16 @@ const blogSlice = createSlice({
 export const { setBlogs } = blogSlice.actions;
 export default blogSlice.reducer;
 
-export const getAllBlogThunk = () => (dispatch) => {
-  const url = `http://localhost:8080/blog/list`;
+export const getAllBlogThunk = (id) => (dispatch) => {
+  let url;
+
+  if (!id) {
+    url = `http://localhost:8080/blog/list`;
+  } else {
+    url = `http://localhost:8080/blog/category/${id}`;
+  }
   axios
-    .get(url)
+    .get(url, config())
     .then((res) => dispatch(setBlogs(res.data)))
     .catch((err) => console.log(err));
 };
