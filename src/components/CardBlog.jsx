@@ -5,7 +5,6 @@ const CardBlog = ({ blog }) => {
                     p-6 font-mono 
                     hover:bg-zinc-800 transition-colors duration-200"
     >
-      {/* Metadata estilo terminal */}
       <div className="text-xs text-cyan-400 mb-2">{blog.user.name}</div>
 
       {/* Título */}

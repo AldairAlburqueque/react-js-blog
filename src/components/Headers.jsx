@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { User, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import axios from "axios";
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [category, setCategory] = useState([]);
   const [open, setOpen] = useState(false);
@@ -26,7 +27,7 @@ const Header = () => {
     localStorage.removeItem("name");
     dispatch(logout());
   };
-  console.log(category);
+
   return (
     <header className="bg-zinc-950 border-b border-zinc-800 font-mono sticky top-0 z-50 backdrop-blur">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -41,26 +42,29 @@ const Header = () => {
         </Link>
 
         {/* Categorías */}
-        <div className="relative">
+        <div className="relative inline-block">
           <h4
-            onClick={() => {
-              setOpen(!open);
-            }}
+            onClick={() => setOpen(!open)}
+            className="cursor-pointer select-none"
           >
             Categorías
           </h4>
 
           {open && (
-            <ul className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-700 shadow-lg">
+            <ul
+              className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border
+                          border-zinc-700 shadow-lg rounded-md overflow-hidden z-50"
+            >
               {category?.map((cat) => (
-                <Link
-                  to={`blog/category/${cat.idCategory}`}
-                  key={cat.idCategory}
-                  className="px-4 py-2 text-sm text-zinc-300 hover:bg-amber-400 hover:text-white cursor-pointer transition-colors"
-                  onClick={() => setOpen(false)}
-                >
-                  {cat.categoria}
-                </Link>
+                <li key={cat.idCategory}>
+                  <Link
+                    to={`/blog/category/${cat.idCategory}`}
+                    className="block px-4 py-2 text-sm text-zinc-300 hover:bg-amber-400 hover:text-black transition-colors"
+                    onClick={() => setOpen(false)}
+                  >
+                    {cat.categoria}
+                  </Link>
+                </li>
               ))}
             </ul>
           )}
@@ -98,7 +102,10 @@ const Header = () => {
           ) : (
             <div className="flex items-center gap-4">
               {/* Avatar */}
-              <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-700 px-3 py-1.5">
+              <div
+                onClick={() => navigate("/blog/me")}
+                className="flex items-center gap-2 bg-zinc-900 border border-zinc-700 px-3 py-1.5 cursor-pointer hover:bg-zinc-800 transition-colors"
+              >
                 <User size={16} className="text-amber-400" />
                 <span className="text-sm text-zinc-300 tracking-wide">
                   {user}

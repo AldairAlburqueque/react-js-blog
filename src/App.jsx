@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import Header from "./components/Headers";
 import ProtecteRoutes from "./pages/ProtecteRoutes";
 import { CreateBlog } from "./pages/CreateBlog";
+import BlogMe from "./pages/BlogMe";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         </Route>
         <Route element={<ProtecteRoutes />}>
           <Route path="/blog/create" element={<CreateBlog />} />
+          <Route path="/blog/me" element={<BlogMe />} />
         </Route>
         <Route path="/blog/category/:id" element={<HomePage />} />
       </Routes>
