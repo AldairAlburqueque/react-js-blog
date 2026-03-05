@@ -35,3 +35,10 @@ export const getMyBlogThunk = () => (dispatch) => {
     .then((res) => dispatch(setBlogs(res.data)))
     .catch((err) => console.log(err));
 };
+
+export const searchBlogThunk = (title) => (dispatch) => {
+  const url = `${API_URL}/blog/search?title=${title}`
+  axios.get(url, config())
+    .then((res) => dispatch(setBlogs(res.data)))
+    .catch((err) => console.log(err))
+}

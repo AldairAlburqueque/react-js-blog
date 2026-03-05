@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/auth.slice";
 import axios from "axios";
+import { searchBlogThunk } from "../store/slices/blogs.slice";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
@@ -12,6 +13,7 @@ const Header = () => {
 
   const [category, setCategory] = useState([]);
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const url = `http://localhost:8080/category/list`;
@@ -21,6 +23,16 @@ const Header = () => {
       .then((res) => setCategory(res.data))
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (search.trim() !== "") {
+        dispatch(searchBlogThunk(search));
+      }
+    }, 400);
+
+    return () => clearTimeout(delay);
+  }, [search]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -75,8 +87,10 @@ const Header = () => {
           <Search size={16} className="text-zinc-500 mr-2" />
           <input
             type="text"
-            placeholder="Search articles..."
-            className="bg-transparent outline-none text-zinc-300 text-sm w-48 placeholder:text-zinc-600"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar blog...."
+            className="px-3 py-2 bg-zinc-900 border border-zinc-700 text-zinc-300"
           />
         </div>
 
