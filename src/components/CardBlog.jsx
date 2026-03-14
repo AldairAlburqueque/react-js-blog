@@ -19,7 +19,7 @@ const CardBlog = ({ blog }) => {
 
       {/* Footer técnico */}
       <div className="mt-4 flex justify-between text-xs">
-        <span className="text-red-500">LOG_ENTRY</span>
+        <span className="text-red-500">Ver Mas</span>
       </div>
     </div>
   );

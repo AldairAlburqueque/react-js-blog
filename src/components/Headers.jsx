@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/auth.slice";
 import axios from "axios";
-import { searchBlogThunk } from "../store/slices/blogs.slice";
+import { searchBlogThunk, getAllBlogThunk } from "../store/slices/blogs.slice";
+import { API_URL } from "../utils/url";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
@@ -14,6 +15,10 @@ const Header = () => {
   const [category, setCategory] = useState([]);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [openSearch, setOpenSearch] = useState(false);
+
+  const { blogs } = useSelector((state) => state);
+  console.log(blogs);
 
   useEffect(() => {
     const url = `http://localhost:8080/category/list`;
@@ -25,13 +30,13 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      if (search.trim() !== "") {
-        dispatch(searchBlogThunk(search));
-      }
-    }, 400);
-
-    return () => clearTimeout(delay);
+    if (search.trim() !== "") {
+      dispatch(searchBlogThunk(search));
+      setOpenSearch(true);
+    } else {
+      dispatch(getAllBlogThunk());
+      setOpenSearch(false);
+    }
   }, [search]);
 
   const handleLogout = () => {
@@ -85,13 +90,39 @@ const Header = () => {
         {/* Buscador */}
         <div className="hidden md:flex items-center bg-zinc-900 border border-zinc-700 px-4 py-2 rounded-sm focus-within:border-amber-400 transition-all duration-300">
           <Search size={16} className="text-zinc-500 mr-2" />
-          <input
+          {/* <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar blog...."
-            className="px-3 py-2 bg-zinc-900 border border-zinc-700 text-zinc-300"
-          />
+          /> */}
+
+          <div className="relative">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar blog..."
+              className="bg-transparent outline-none text-zinc-300 text-sm w-48 placeholder:text-zinc-600"
+            />
+            {openSearch && blogs?.content?.length > 0 && (
+              <ul className="absolute top-full left-0 w-72 mt-2 bg-zinc-900 border border-zinc-700 shadow-lg z-50 max-h-60 overflow-y-auto">
+                {blogs?.content.map((blog) => (
+                  <li
+                    key={blog.idBlog}
+                    onClick={() => {
+                      navigate(`blog/${blog.idBlog}`);
+                      setOpenSearch(false);
+                      setSearch("");
+                    }}
+                    className="px-4 py-2 text-sm text-zinc-300 hover:bg-amber-400 hover:text-black cursor-pointer transition-colors"
+                  >
+                    {blog.title}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         {/* Acciones */}

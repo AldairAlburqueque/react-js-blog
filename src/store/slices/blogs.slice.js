@@ -37,8 +37,9 @@ export const getMyBlogThunk = () => (dispatch) => {
 };
 
 export const searchBlogThunk = (title) => (dispatch) => {
-  const url = `${API_URL}/blog/search?title=${title}`
-  axios.get(url, config())
+  const url = `${API_URL}/blog/search?title=${title}`;
+  axios
+    .get(url, config())
     .then((res) => dispatch(setBlogs(res.data)))
-    .catch((err) => console.log(err))
-}
+    .catch((err) => console.log(err));
+};
