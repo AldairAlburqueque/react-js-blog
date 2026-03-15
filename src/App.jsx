@@ -21,6 +21,7 @@ function App() {
         <Route element={<ProtecteRoutes />}>
           <Route path="/blog/create" element={<CreateBlog />} />
           <Route path="/blog/me" element={<BlogMe />} />
+          <Route path="/blog/:id" element={<HomePage />} />
         </Route>
         <Route path="/blog/category/:id" element={<HomePage />} />
       </Routes>

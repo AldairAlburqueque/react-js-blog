@@ -43,3 +43,11 @@ export const searchBlogThunk = (title) => (dispatch) => {
     .then((res) => dispatch(setBlogs(res.data)))
     .catch((err) => console.log(err));
 };
+
+export const blogIdThunk = (id) => (dispatch) => {
+  const url = `${API_URL}/blog/${id}`;
+  axios
+    .get(url, config())
+    .then((res) => dispatch(setBlogs(res.data)))
+    .catch((err) => console.log(err));
+};

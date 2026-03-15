@@ -14,11 +14,10 @@ const Header = () => {
 
   const [category, setCategory] = useState([]);
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [openSearch, setOpenSearch] = useState(false);
+  // const [search, setSearch] = useState("");
+  // const [openSearch, setOpenSearch] = useState(false);
 
   const { blogs } = useSelector((state) => state);
-  console.log(blogs);
 
   useEffect(() => {
     const url = `http://localhost:8080/category/list`;
@@ -29,15 +28,21 @@ const Header = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {
-    if (search.trim() !== "") {
-      dispatch(searchBlogThunk(search));
-      setOpenSearch(true);
-    } else {
-      dispatch(getAllBlogThunk());
-      setOpenSearch(false);
-    }
-  }, [search]);
+  // useEffect(() => {
+  //   if (search.trim() !== "") {
+  //     dispatch(searchBlogThunk(search));
+  //     setOpenSearch(true);
+  //   } else {
+  //     dispatch(getAllBlogThunk());
+  //     setOpenSearch(false);
+  //   }
+  // }, [search]);
+
+  const hangleSearch = (e) => {
+    e.preventDefault();
+    const input = e.target.search.value.trim().toLowerCase();
+    dispatch(searchBlogThunk(input));
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -96,8 +101,12 @@ const Header = () => {
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar blog...."
           /> */}
+          <form onSubmit={hangleSearch}>
+            <input type="text" id="search" />
+            <button>cl</button>
+          </form>
 
-          <div className="relative">
+          {/* <div className="relative">
             <input
               type="text"
               value={search}
@@ -122,7 +131,7 @@ const Header = () => {
                 ))}
               </ul>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Acciones */}
