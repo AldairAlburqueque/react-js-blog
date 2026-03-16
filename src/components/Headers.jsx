@@ -94,7 +94,8 @@ const Header = () => {
 
         {/* Buscador */}
         <div className="hidden md:flex items-center bg-zinc-900 border border-zinc-700 px-4 py-2 rounded-sm focus-within:border-amber-400 transition-all duration-300">
-          <Search size={16} className="text-zinc-500 mr-2" />
+          {/* <Search size={16} className="text-zinc-500 mr-2" /> */}
+
           {/* <input
             type="text"
             value={search}

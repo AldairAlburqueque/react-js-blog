@@ -37,7 +37,15 @@ export const getMyBlogThunk = () => (dispatch) => {
 };
 
 export const searchBlogThunk = (title) => (dispatch) => {
-  const url = `${API_URL}/blog/search?title=${title}`;
+  // const url = `${API_URL}/blog/search?title=${title}`;
+
+  let url;
+
+  if (title) {
+    url = `${API_URL}/blog/search?title=${title}`;
+  } else {
+    url = `${API_URL}/blog/list`;
+  }
   axios
     .get(url, config())
     .then((res) => dispatch(setBlogs(res.data)))
