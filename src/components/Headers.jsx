@@ -54,7 +54,11 @@ const Header = () => {
     <header className="bg-zinc-950 border-b border-zinc-800 font-mono sticky top-0 z-50 backdrop-blur">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
+        <Link
+          to="/"
+          className="flex items-center gap-3 group"
+          onClick={() => dispatch(getAllBlogThunk())}
+        >
           <div className="border border-amber-400 px-2 py-1 text-amber-400 font-bold tracking-widest group-hover:bg-amber-400 group-hover:text-black transition-all duration-300">
             BC
           </div>
