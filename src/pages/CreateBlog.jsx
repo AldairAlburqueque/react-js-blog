@@ -2,19 +2,29 @@ import React, { useEffect, useState } from "react";
 import { API_URL } from "../utils/url";
 import config from "../utils/getConfig";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export const CreateBlog = () => {
+  const { register, handleSubmit, reset } = useForm();
   const [category, setCategory] = useState([]);
+  const navigate = useNavigate();
 
-  const createBlog = () => {
+  const submit = (data) => {
     const url = `${API_URL}/blog/create`;
-    axios
-      .post(url, config())
-      .then((res) => res.data)
-      .catch((err) => console.log(err));
-  };
 
-  const handleCategory = () => {};
+    // const body = {
+    //   ...data,
+    //   categoryId: Number(data.categoryId),
+    // };
+
+    axios
+      .post(url, data, config())
+      .then((res) => res.data)
+      .catch((err) => console.log(err.response?.data));
+
+    navigate("/");
+  };
 
   useEffect(() => {
     const url = `http://localhost:8080/category/list`;
@@ -32,12 +42,16 @@ export const CreateBlog = () => {
           CREATE_BLOG_ENTRY
         </h2>
 
-        <form className="space-y-6" onSubmit={createBlog}>
+        <form className="space-y-6" onSubmit={handleSubmit(submit)}>
           {/* Title */}
           <div className="flex flex-col">
-            <label className="text-zinc-400 text-xs mb-1">TITLE</label>
+            <label htmlFor="title" className="text-zinc-400 text-xs mb-1">
+              TITLE
+            </label>
             <input
               type="text"
+              {...register("title")}
+              id="title"
               className="bg-zinc-800 border border-zinc-700 text-zinc-200 p-2 
             focus:outline-none focus:border-amber-400 transition-colors"
             />
@@ -45,8 +59,12 @@ export const CreateBlog = () => {
 
           {/* Content */}
           <div className="flex flex-col">
-            <label className="text-zinc-400 text-xs mb-1">CONTENT</label>
+            <label htmlFor="content" className="text-zinc-400 text-xs mb-1">
+              CONTENT
+            </label>
             <textarea
+              {...register("content")}
+              id="content"
               rows="5"
               className="bg-zinc-800 border border-zinc-700 text-zinc-200 p-2 
             focus:outline-none focus:border-amber-400 transition-colors resize-none"
@@ -57,12 +75,17 @@ export const CreateBlog = () => {
           <div className="flex flex-col">
             <label className="text-zinc-400 text-xs mb-1">CATEGORY</label>
             <select
+              {...register("categoryId")}
               className="bg-zinc-800 border border-zinc-700 text-zinc-200 p-2 
-            focus:outline-none focus:border-amber-400 transition-colors"
+  focus:outline-none focus:border-amber-400 transition-colors"
             >
               <option value="">-- SELECT CATEGORY --</option>
               {category?.map((cat) => (
-                <option key={cat.idCategory} value={cat.idCategory}>
+                <option
+                  key={cat.idCategory}
+                  value={cat.idCategory}
+                  id={cat.idCategory}
+                >
                   {cat.categoria}
                 </option>
               ))}

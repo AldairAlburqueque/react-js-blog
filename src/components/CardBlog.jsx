@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const CardBlog = ({ blog }) => {
   return (
     <div
@@ -19,7 +21,9 @@ const CardBlog = ({ blog }) => {
 
       {/* Footer técnico */}
       <div className="mt-4 flex justify-between text-xs">
-        <span className="text-red-500">Ver Mas</span>
+        <Link className="text-red-500" to={`/blog/${blog.idBlog}`}>
+          Leer más
+        </Link>
       </div>
     </div>
   );

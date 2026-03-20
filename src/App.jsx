@@ -7,6 +7,7 @@ import Header from "./components/Headers";
 import ProtecteRoutes from "./pages/ProtecteRoutes";
 import { CreateBlog } from "./pages/CreateBlog";
 import BlogMe from "./pages/BlogMe";
+import BlogDetail from "./pages/BlogDetail";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <Route element={<ProtecteRoutes />}>
           <Route path="/blog/create" element={<CreateBlog />} />
           <Route path="/blog/me" element={<BlogMe />} />
-          <Route path="/blog/:id" element={<HomePage />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
         </Route>
         <Route path="/blog/category/:id" element={<HomePage />} />
       </Routes>
