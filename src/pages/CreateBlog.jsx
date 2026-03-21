@@ -13,11 +13,6 @@ export const CreateBlog = () => {
   const submit = (data) => {
     const url = `${API_URL}/blog/create`;
 
-    // const body = {
-    //   ...data,
-    //   categoryId: Number(data.categoryId),
-    // };
-
     axios
       .post(url, data, config())
       .then((res) => res.data)
