@@ -1,0 +1,160 @@
+Perfecto, este código es MUY importante en React 🔥
+si lo entiendes bien, subes de nivel bastante.
+
+🧠 EL CÓDIGO
+setBlog((prev) => ({
+  ...prev,
+  comments: [...(prev.comments || []), res.data],
+}));
+🔥 EXPLICACIÓN PASO A PASO
+🟡 1. setBlog((prev) => ...)
+
+👉 No estás pasando un valor directo, sino una función
+
+(prev) => ...
+
+👉 prev = estado anterior de blog
+
+Ejemplo:
+
+prev = {
+  title: "Postgres",
+  content: "...",
+  comments: [ ... ]
+}
+🟡 2. ...prev
+{
+  ...prev
+}
+
+👉 copia TODO el blog anterior
+
+Ejemplo:
+
+{
+  title: "Postgres",
+  content: "...",
+  comments: [...]
+}
+
+👉 esto evita que pierdas datos
+
+🟡 3. comments: [...]
+
+Aquí estás sobrescribiendo SOLO los comentarios
+
+comments: [...]
+🟡 4. [...(prev.comments || []), res.data]
+
+Esta es la parte más importante 🔥
+
+👉 prev.comments || []
+
+Significa:
+
+si comments existe → úsalo
+si NO existe → usa []
+
+Ejemplo:
+
+prev.comments = undefined
+
+👉 entonces:
+
+prev.comments || [] → []
+👉 ...prev.comments
+[...prev.comments]
+
+👉 copia los comentarios actuales
+
+Ejemplo:
+
+[
+  { comment: "hola" },
+  { comment: "otro" }
+]
+👉 res.data
+
+👉 es el nuevo comentario que acabas de crear
+
+Ejemplo:
+
+{ comment: "Buen blog" }
+🔥 TODO JUNTO
+comments: [
+  ...comentarios_anteriores,
+  comentario_nuevo
+]
+🎯 RESULTADO FINAL
+
+Antes:
+
+blog = {
+  comments: [
+    { comment: "hola" }
+  ]
+}
+
+Después:
+
+blog = {
+  comments: [
+    { comment: "hola" },
+    { comment: "Buen blog" }
+  ]
+}
+
+👉 React detecta cambio → re-render 🔥
+
+⚠️ ¿POR QUÉ SE HACE ASÍ?
+
+Porque en React:
+
+👉 ❌ NO debes mutar el estado directamente
+
+Esto está MAL:
+
+prev.comments.push(res.data) ❌
+
+👉 React no detecta cambios bien
+
+✅ FORMA CORRECTA
+comments: [...prev.comments, res.data]
+
+👉 creas un nuevo array → React actualiza UI
+
+🧠 IDEA CLAVE (MUY IMPORTANTE)
+
+Este patrón es:
+
+👉 inmutabilidad
+
+no modificas lo viejo
+creas algo nuevo basado en lo anterior
+🔥 RESUMEN SIMPLE
+
+Este código hace:
+
+👉 “mantén todo el blog igual
+👉 pero agrega un nuevo comentario al final”
+
+🚀 ANALOGÍA RÁPIDA
+
+Imagina:
+
+Lista: [A, B]
+Nuevo: C
+
+Resultado:
+
+[A, B, C]
+🚀 NIVEL PRO (lo que acabas de aprender)
+
+Esto se usa en TODO:
+
+Redux
+React
+filtros
+listas
+likes
+chats
