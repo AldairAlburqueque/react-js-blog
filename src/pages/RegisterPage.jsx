@@ -18,16 +18,16 @@ const RegisterPage = () => {
       console.log(res.data);
 
       reset(defaultValues);
-      navigate("/login");
+      navigate("auth/login");
     } catch (err) {
       console.error("Error al registrar:", err.response?.data || err.message);
     }
   };
 
-  const roles = [
-    { idRol: 1, rol: "Admin" },
-    { idRol: 2, rol: "User" },
-  ];
+  // const roles = [
+  //   { idRol: 1, rol: "Admin" },
+  //   { idRol: 2, rol: "User" },
+  // ];
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center font-mono px-4">

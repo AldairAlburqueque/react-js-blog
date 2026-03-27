@@ -24,11 +24,13 @@ const LoginPage = () => {
         setToken(res.data.token);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("name", res.data.name);
+        localStorage.setItem("role", res.data.role);
 
         dispatch(
           setUser({
             user: res.data.name,
             token: res.data.token,
+            role: res.data.role,
           }),
         );
         if (localStorage.getItem("token")) {

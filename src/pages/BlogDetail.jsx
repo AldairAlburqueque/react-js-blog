@@ -4,10 +4,14 @@ import axios from "axios";
 import { API_URL } from "../utils/url";
 import config from "../utils/getConfig";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
   const { register, handleSubmit, reset } = useForm();
+  const { auth } = useSelector((state) => state);
+
+  console.log("auth: ", auth);
 
   const { id } = useParams();
 
@@ -38,6 +42,16 @@ const BlogDetail = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleDeleteComment = (commentId) => {
+    const url = `${API_URL}/comments/delete/${commentId}`;
+    axios
+      .delete(url, config())
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+  };
+
+  const token = localStorage.getItem("token");
+
   if (!blog) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-zinc-500 font-mono">
@@ -45,7 +59,7 @@ const BlogDetail = () => {
       </div>
     );
   }
-  console.log(blog);
+  console.log("blog: ", blog);
   return (
     <div className="min-h-screen bg-black text-zinc-300 font-mono px-6 py-10">
       <div className="max-w-4xl mx-auto">
@@ -152,6 +166,16 @@ const BlogDetail = () => {
                       <p className="text-sm text-zinc-300 leading-relaxed">
                         {com.comment}
                       </p>
+
+                      {blog?.user.idUser === com?.user.idUser ? (
+                        <button
+                          onClick={() => handleDeleteComment(com.idComment)}
+                        >
+                          Eliminar
+                        </button>
+                      ) : (
+                        <h1>hola</h1>
+                      )}
                     </div>
                   </div>
                 </div>
