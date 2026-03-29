@@ -12,6 +12,7 @@ const BlogDetail = () => {
   const { auth } = useSelector((state) => state);
 
   console.log("auth: ", auth);
+  console.log("auth role: ", auth.role);
 
   const { id } = useParams();
 
