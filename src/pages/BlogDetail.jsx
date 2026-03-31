@@ -6,13 +6,12 @@ import config from "../utils/getConfig";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
+import { Trash2 } from "lucide-react";
+
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
   const { register, handleSubmit, reset } = useForm();
   const { auth } = useSelector((state) => state);
-
-  console.log("auth: ", auth);
-  console.log("auth role: ", auth.role);
 
   const { id } = useParams();
 
@@ -44,14 +43,19 @@ const BlogDetail = () => {
   };
 
   const handleDeleteComment = (commentId) => {
+    const confirmDelete = window.confirm("¿Eliminar comentario?");
+    // if (!confirmDelete) return;
     const url = `${API_URL}/comments/delete/${commentId}`;
     axios
       .delete(url, config())
-      .then((res) => res.data)
+      .then(() => {
+        setBlog((prev) => ({
+          ...prev,
+          comments: prev.comments.filter((c) => c.idComment !== commentId),
+        }));
+      })
       .catch((err) => console.log(err));
   };
-
-  const token = localStorage.getItem("token");
 
   if (!blog) {
     return (
@@ -60,7 +64,7 @@ const BlogDetail = () => {
       </div>
     );
   }
-  console.log("blog: ", blog);
+
   return (
     <div className="min-h-screen bg-black text-zinc-300 font-mono px-6 py-10">
       <div className="max-w-4xl mx-auto">
@@ -162,20 +166,24 @@ const BlogDetail = () => {
                           {new Date(com.createdAt).toLocaleDateString()}
                         </span>
                       </div>
-
                       {/* CONTENT */}
                       <p className="text-sm text-zinc-300 leading-relaxed">
                         {com.comment}
                       </p>
 
-                      {blog?.user.idUser === com?.user.idUser ? (
+                      {auth.idUser === com.user?.idUser ||
+                      auth.idUser === blog.user?.idUser ||
+                      auth.role === "Admin" ? (
                         <button
                           onClick={() => handleDeleteComment(com.idComment)}
+                          className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
+  hover:bg-red-500 hover:text-black transition-all duration-300"
                         >
-                          Eliminar
+                          <Trash2 size={14} />
+                          DELETE
                         </button>
                       ) : (
-                        <h1>hola</h1>
+                        <span></span>
                       )}
                     </div>
                   </div>
