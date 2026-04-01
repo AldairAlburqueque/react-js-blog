@@ -4,7 +4,7 @@ const initialState = {
   user: localStorage.getItem("name") || null,
   token: localStorage.getItem("token") || null,
   role: localStorage.getItem("role") || null,
-  role: localStorage.getItem("idUser") || null,
+  idUser: localStorage.getItem("idUser") || null,
 };
 
 const authSlice = createSlice({

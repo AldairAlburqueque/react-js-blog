@@ -43,10 +43,19 @@ const BlogDetail = () => {
   };
 
   const handleDeleteComment = (commentId) => {
+    const confirmDelete = window.confirm("¿Eliminar comentario?");
+    if (!confirmDelete) return;
+
     const url = `${API_URL}/comments/delete/${commentId}`;
+
     axios
       .delete(url, config())
-      .then((res) => res.data)
+      .then(() => {
+        setBlog((prev) => ({
+          ...prev,
+          comments: prev.comments.filter((c) => c.idComment !== commentId),
+        }));
+      })
       .catch((err) => console.log(err));
   };
 
@@ -166,15 +175,16 @@ const BlogDetail = () => {
 
                       {auth.idUser === com.user?.idUser ||
                       auth.idUser === blog.user?.idUser ||
-                      auth.role == "Admin" ? (
+                      auth.role === "Admin" ? (
                         <button
                           onClick={() => handleDeleteComment(com.idComment)}
+                          className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
+  hover:bg-red-500 hover:text-black transition-all duration-300"
                         >
-                          {" "}
-                          Eliminar{" "}
+                          <Trash2 size={14} />
                         </button>
                       ) : (
-                        <h1>hola</h1>
+                        <h1>Pikachu</h1>
                       )}
                     </div>
                   </div>

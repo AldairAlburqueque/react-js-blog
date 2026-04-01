@@ -25,12 +25,14 @@ const LoginPage = () => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("name", res.data.name);
         localStorage.setItem("role", res.data.role);
+        localStorage.setItem("idUser", res.data.idUser);
 
         dispatch(
           setUser({
             user: res.data.name,
             token: res.data.token,
             role: res.data.role,
+            idUser: res.data.idUser,
           }),
         );
         if (localStorage.getItem("token")) {
