@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 import { Trash2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
@@ -172,20 +173,36 @@ const BlogDetail = () => {
                       <p className="text-sm text-zinc-300 leading-relaxed">
                         {com.comment}
                       </p>
-
-                      {auth.idUser === com.user?.idUser ||
-                      auth.idUser === blog.user?.idUser ||
-                      auth.role === "Admin" ? (
-                        <button
-                          onClick={() => handleDeleteComment(com.idComment)}
-                          className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
+                      <div>
+                        <span>
+                          {auth.idUser === com.user?.idUser ||
+                          auth.idUser === blog.user?.idUser ||
+                          auth?.role === "Admin" ? (
+                            <button
+                              onClick={() => handleDeleteComment(com.idComment)}
+                              className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
   hover:bg-red-500 hover:text-black transition-all duration-300"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      ) : (
-                        <h1>Pikachu</h1>
-                      )}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          ) : (
+                            <span>Exception</span>
+                          )}
+                        </span>
+                        <span>
+                          {auth.idUser === com.user?.idUser ? (
+                            <button
+                              onClick={() => handleDeleteComment(com.idComment)}
+                              className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
+  hover:bg-red-500 hover:text-black transition-all duration-300"
+                            >
+                              <Pencil size={20} />
+                            </button>
+                          ) : (
+                            <span>NOT</span>
+                          )}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
