@@ -10,6 +10,8 @@ export const CreateBlog = () => {
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
 
+  const [content, setContent] = useState("");
+
   const submit = (data) => {
     const url = `${API_URL}/blog/create`;
 
@@ -19,6 +21,14 @@ export const CreateBlog = () => {
       .catch((err) => console.log(err.response?.data));
 
     navigate("/");
+  };
+
+  const update = (data, id) => {
+    const url = `${API_URL}/blog/update/${id}`;
+    axios
+      .update(url, data, config())
+      .then((res) => setContent(res.data))
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {

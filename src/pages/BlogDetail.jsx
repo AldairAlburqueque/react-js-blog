@@ -103,6 +103,12 @@ const BlogDetail = () => {
           {blog.content}
         </div>
 
+        {/* UPDATE AND DELETE */}
+        <div>
+          <div>UPDATE</div>
+          <div>DELETE</div>
+        </div>
+
         {/* COMMENTS */}
         <div className="mt-12">
           <h2 className="text-lg text-amber-400 border-b border-zinc-700 pb-2 mb-6 tracking-wide">
