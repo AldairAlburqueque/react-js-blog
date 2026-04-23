@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+//Este formulario es para editar o crear un blog
 const FormBlog = () => {
   const [category, setCategory] = useState([]);
 
@@ -28,11 +29,11 @@ const FormBlog = () => {
         <div>
           <label htmlFor="">Categoría</label>
           <select>
-            {category.map((cat) => (
-              <option value="" key={cat.id}>
-                {cat.categoria}
-              </option>
-            ))}
+            {/* {category.map((cat) => (
+                <option value="" key={cat.id}>
+                  {cat.categoria}
+                </option>
+              ))} */}
           </select>
         </div>
       </form>
