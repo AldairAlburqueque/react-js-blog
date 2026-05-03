@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../utils/url";
 import config from "../utils/getConfig";
@@ -105,7 +105,7 @@ const BlogDetail = () => {
 
         {/* UPDATE AND DELETE */}
         <div>
-          <div>UPDATE</div>
+          <Link to={`/blog/edit/${blog.idBlog}`}>Editar</Link>
           <div>DELETE</div>
         </div>
 

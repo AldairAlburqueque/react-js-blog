@@ -8,6 +8,7 @@ import ProtecteRoutes from "./pages/ProtecteRoutes";
 import { CreateBlog } from "./pages/CreateBlog";
 import BlogMe from "./pages/BlogMe";
 import BlogDetail from "./pages/BlogDetail";
+import FormBlog from "./components/FormBlog";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
           <Route path="login" element={<LoginPage />} />
         </Route>
         <Route element={<ProtecteRoutes />}>
-          <Route path="/blog/create" element={<CreateBlog />} />
+          <Route path="/blog/create" element={<FormBlog />} />
+          <Route path="/blog/edit/:id" element={<FormBlog />} />
           <Route path="/blog/me" element={<BlogMe />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
         </Route>
