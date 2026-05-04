@@ -4,12 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../utils/url";
 import { useForm } from "react-hook-form";
 import config from "../utils/getConfig";
+import { useSelector } from "react-redux";
 
 //Este formulario es para editar o crear un blog
 const FormBlog = () => {
   const { id } = useParams();
 
   const { register, handleSubmit, reset } = useForm();
+
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
 
@@ -20,7 +22,6 @@ const FormBlog = () => {
     const url = `${API_URL}/blog/create`;
     axios
       .post(url, data, config())
-      //.then((res) => res.data)
       .then((res) => navigate("/"))
       .catch((err) => console.log(err.response?.data));
   };
@@ -105,7 +106,7 @@ const FormBlog = () => {
             <select
               {...register("categoryId")}
               className="bg-zinc-800 border border-zinc-700 text-zinc-200 p-2 
-    focus:outline-none focus:border-amber-400 transition-colors"
+                          focus:outline-none focus:border-amber-400 transition-colors"
             >
               <option value="">-- SELECT CATEGORY --</option>
               {category?.map((cat) => (

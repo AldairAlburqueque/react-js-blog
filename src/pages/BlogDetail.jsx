@@ -14,6 +14,9 @@ const BlogDetail = () => {
   const { register, handleSubmit, reset } = useForm();
   const { auth } = useSelector((state) => state);
 
+  console.log({ blog: blog });
+  console.log({ auth: auth });
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -105,8 +108,17 @@ const BlogDetail = () => {
 
         {/* UPDATE AND DELETE */}
         <div>
-          <Link to={`/blog/edit/${blog.idBlog}`}>Editar</Link>
-          <div>DELETE</div>
+          {blog.user?.idUser === auth.idUser ? (
+            <Link to={`/blog/edit/${blog.idBlog}`}>Editar</Link>
+          ) : (
+            <span></span>
+          )}
+
+          {blog.user?.idUser === auth.idUser ? (
+            <button>Eliminar</button>
+          ) : (
+            <span></span>
+          )}
         </div>
 
         {/* COMMENTS */}
