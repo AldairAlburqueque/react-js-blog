@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../utils/url";
 import config from "../utils/getConfig";
@@ -9,13 +9,14 @@ import { useSelector } from "react-redux";
 import { Trash2 } from "lucide-react";
 import { Pencil } from "lucide-react";
 
+import Swal from "sweetalert2";
+
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
   const { register, handleSubmit, reset } = useForm();
   const { auth } = useSelector((state) => state);
 
-  console.log({ blog: blog });
-  console.log({ auth: auth });
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -44,6 +45,24 @@ const BlogDetail = () => {
         reset();
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleDeleteBlog = (id) => {
+    Swal.fire({
+      title: "¿Eliminar blog?",
+      text: "No podrás revertir esto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`${API_URL}/blog/delete/${id}`, config()).then(() => {
+          Swal.fire("Eliminado", "El blog fue eliminado", "success");
+          navigate("/");
+        });
+      }
+    });
   };
 
   const handleDeleteComment = (commentId) => {
@@ -115,7 +134,9 @@ const BlogDetail = () => {
           )}
 
           {blog.user?.idUser === auth.idUser ? (
-            <button>Eliminar</button>
+            <button onClick={() => handleDeleteBlog(blog.idBlog)}>
+              Eliminar
+            </button>
           ) : (
             <span></span>
           )}
@@ -229,7 +250,7 @@ const BlogDetail = () => {
           )}
         </div>
 
-        {/* FOOTER SYSTEM STYLE */}
+        {/* FOOTER */}
         <div className="mt-10 text-xs text-zinc-600 border-t border-zinc-800 pt-4">
           status: blog_loaded_successfully ✔
         </div>
