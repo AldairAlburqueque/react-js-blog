@@ -6,8 +6,7 @@ import config from "../utils/getConfig";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
-import { Trash2 } from "lucide-react";
-import { Pencil } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 
 import Swal from "sweetalert2";
 
@@ -126,19 +125,37 @@ const BlogDetail = () => {
         </div>
 
         {/* UPDATE AND DELETE */}
-        <div>
-          {blog.user?.idUser === auth.idUser ? (
-            <Link to={`/blog/edit/${blog.idBlog}`}>Editar</Link>
-          ) : (
-            <span></span>
-          )}
+        <div className="flex justify-end gap-3 mt-6">
+          {blog?.user?.idUser === auth?.idUser && (
+            <>
+              {/* EDIT */}
+              <Link
+                to={`/blog/edit/${blog.idBlog}`}
+                className="
+          flex items-center gap-2
+          px-3 py-2 text-xs tracking-widest
+          border border-cyan-400 text-cyan-400
+          hover:bg-cyan-400 hover:text-black
+          transition-all duration-300
+        "
+              >
+                <Pencil size={14} />
+              </Link>
 
-          {blog.user?.idUser === auth.idUser ? (
-            <button onClick={() => handleDeleteBlog(blog.idBlog)}>
-              Eliminar
-            </button>
-          ) : (
-            <span></span>
+              {/* DELETE */}
+              <button
+                onClick={() => handleDeleteBlog(blog.idBlog)}
+                className="
+          flex items-center gap-2
+          px-3 py-2 text-xs tracking-widest
+          border border-red-500 text-red-500
+          hover:bg-red-500 hover:text-black
+          transition-all duration-300
+        "
+              >
+                <Trash2 size={14} />
+              </button>
+            </>
           )}
         </div>
 
