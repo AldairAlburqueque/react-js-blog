@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import { User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/auth.slice";
@@ -15,18 +14,14 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { blogs } = useSelector((state) => state);
-
   useEffect(() => {
-    const url = `http://localhost:8080/category/list`;
-
     axios
-      .get(url)
+      .get("http://localhost:8080/category/list")
       .then((res) => setCategory(res.data))
       .catch((err) => console.log(err));
   }, []);
 
-  const hangleSearch = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     const input = e.target.search.value.trim().toLowerCase();
     dispatch(searchBlogThunk(input));
@@ -36,12 +31,25 @@ const Header = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("name");
     dispatch(logout());
+    navigate("/auth/login");
   };
+
+  // cerrar dropdown al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".category-dropdown")) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   return (
     <header className="bg-zinc-950 border-b border-zinc-800 font-mono sticky top-0 z-50 backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+        {/* LOGO */}
         <Link
           to="/"
           onClick={() => dispatch(getAllBlogThunk())}
@@ -55,7 +63,7 @@ const Header = () => {
           </h1>
         </Link>
 
-        {/* Botón hamburguesa (mobile) */}
+        {/* BOTÓN MOBILE */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden text-amber-400"
@@ -63,37 +71,44 @@ const Header = () => {
           ☰
         </button>
 
-        {/* NAV Desktop */}
+        {/* NAV DESKTOP */}
         <div className="hidden md:flex items-center gap-8">
-          {/* Categorías */}
-          <div className="relative">
-            <h4
+          {/* CATEGORÍAS */}
+          <div className="relative category-dropdown">
+            <button
               onClick={() => setOpen(!open)}
-              className="cursor-pointer text-zinc-300 hover:text-amber-400 transition-colors"
+              className="flex items-center gap-2 text-zinc-300 text-sm tracking-widest hover:text-amber-400 transition-colors"
             >
-              Categorías
-            </h4>
+              CATEGORIES
+              <span
+                className={`transition-transform ${open ? "rotate-180" : ""}`}
+              >
+                ▼
+              </span>
+            </button>
 
             {open && (
-              <ul className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-700 shadow-lg rounded-md overflow-hidden z-50">
-                {category?.map((cat) => (
-                  <li key={cat.idCategory}>
-                    <Link
-                      to={`/blog/category/${cat.idCategory}`}
-                      onClick={() => setOpen(false)}
-                      className="block px-4 py-2 text-sm text-zinc-300 hover:bg-amber-400 hover:text-black transition-colors"
-                    >
-                      {cat.categoria}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-700 shadow-lg z-50">
+                <ul className="max-h-60 overflow-y-auto">
+                  {category?.map((cat) => (
+                    <li key={cat.idCategory}>
+                      <Link
+                        to={`/blog/category/${cat.idCategory}`}
+                        onClick={() => setOpen(false)}
+                        className="block px-4 py-2 text-xs text-zinc-300 hover:bg-amber-400 hover:text-black transition-colors"
+                      >
+                        {cat.categoria}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
 
-          {/* Buscador */}
-          <div className="flex items-center bg-zinc-900 border border-zinc-700 px-3 py-1.5 rounded-sm focus-within:border-amber-400 transition-all duration-300">
-            <form onSubmit={hangleSearch} className="flex items-center gap-2">
+          {/* SEARCH */}
+          <div className="flex items-center bg-zinc-900 border border-zinc-700 px-3 py-1.5 focus-within:border-amber-400 transition-all duration-300">
+            <form onSubmit={handleSearch} className="flex items-center gap-2">
               <input
                 type="text"
                 name="search"
@@ -104,7 +119,7 @@ const Header = () => {
             </form>
           </div>
 
-          {/* Acciones */}
+          {/* USER / AUTH */}
           {!user ? (
             <div className="flex items-center gap-4">
               <Link
@@ -115,8 +130,8 @@ const Header = () => {
               </Link>
 
               <Link
-                className="text-sm border border-amber-400 text-amber-400 px-4 py-1.5 hover:bg-amber-400 hover:text-black transition-all duration-300"
                 to="/auth/register"
+                className="text-sm border border-amber-400 text-amber-400 px-4 py-1.5 hover:bg-amber-400 hover:text-black transition-all duration-300"
               >
                 REGISTER
               </Link>
@@ -127,7 +142,7 @@ const Header = () => {
                 onClick={() => navigate("/blog/me")}
                 className="flex items-center gap-2 bg-zinc-900 border border-zinc-700 px-3 py-1.5 cursor-pointer hover:bg-zinc-800 transition-colors"
               >
-                <span className="text-amber-400">👤</span>
+                👤
                 <span className="text-sm text-zinc-300">{user}</span>
               </div>
 
@@ -145,8 +160,8 @@ const Header = () => {
       {/* 📱 MOBILE MENU */}
       {menuOpen && (
         <div className="md:hidden px-4 pb-4 space-y-4 bg-zinc-950 border-t border-zinc-800">
-          {/* Buscador */}
-          <form onSubmit={hangleSearch} className="flex gap-2">
+          {/* SEARCH */}
+          <form onSubmit={handleSearch} className="flex gap-2">
             <input
               type="text"
               name="search"
@@ -156,25 +171,27 @@ const Header = () => {
             <button className="text-amber-400">🔍</button>
           </form>
 
-          {/* Categorías */}
+          {/* CATEGORÍAS */}
           <div>
-            <p className="text-zinc-400 mb-2">Categorías</p>
-            <ul className="space-y-1">
+            <p className="text-zinc-500 text-xs mb-2 tracking-widest">
+              CATEGORIES
+            </p>
+
+            <div className="flex flex-wrap gap-2">
               {category?.map((cat) => (
-                <li key={cat.idCategory}>
-                  <Link
-                    to={`/blog/category/${cat.idCategory}`}
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-3 py-2 text-zinc-300 hover:bg-amber-400 hover:text-black"
-                  >
-                    {cat.categoria}
-                  </Link>
-                </li>
+                <Link
+                  key={cat.idCategory}
+                  to={`/blog/category/${cat.idCategory}`}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-xs px-3 py-1 border border-zinc-700 text-zinc-300 hover:border-amber-400 hover:text-amber-400 transition-all duration-200"
+                >
+                  {cat.categoria}
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Acciones */}
+          {/* USER */}
           {!user ? (
             <div className="flex flex-col gap-2">
               <Link to="/auth/login" className="text-zinc-300">
