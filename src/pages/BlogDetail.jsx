@@ -15,6 +15,9 @@ const BlogDetail = () => {
   const { register, handleSubmit, reset } = useForm();
   const { auth } = useSelector((state) => state);
 
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectComment, setSelectComment] = useState(null);
+
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -81,6 +84,23 @@ const BlogDetail = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleUpdateCommet = (data) => {
+    const url = `${API_URL}/comments/update/${selectComment.idComment}`;
+    axios
+      .put(url, data, config())
+      .then((res) => {
+        setBlog((prev) => ({
+          ...prev,
+          comments: prev.comments.map((c) =>
+            c.idComment === selectComment.idComment ? res.data : c,
+          ),
+        }));
+        setShowEditModal(false);
+        setSelectComment(null);
+      })
+      .catch((err) => console.log(err));
+  };
+
   if (!blog) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-zinc-500 font-mono">
@@ -141,7 +161,10 @@ const BlogDetail = () => {
               >
                 <Pencil size={14} />
               </Link>
-
+            </>
+          )}
+          {(blog?.user?.idUser === auth?.idUser || auth?.role === "Admin") && (
+            <>
               {/* DELETE */}
               <button
                 onClick={() => handleDeleteBlog(blog.idBlog)}
@@ -229,35 +252,38 @@ const BlogDetail = () => {
                       <p className="text-sm text-zinc-300 leading-relaxed">
                         {com.comment}
                       </p>
-                      <div>
-                        <span>
-                          {auth.idUser === com.user?.idUser ||
+                      <div className="flex justify-end gap-2 mt-3">
+                        {(auth.idUser === com.user?.idUser ||
                           auth.idUser === blog.user?.idUser ||
-                          auth?.role === "Admin" ? (
-                            <button
-                              onClick={() => handleDeleteComment(com.idComment)}
-                              className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
-  hover:bg-red-500 hover:text-black transition-all duration-300"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          ) : (
-                            <span>Exception</span>
-                          )}
-                        </span>
-                        <span>
-                          {auth.idUser === com.user?.idUser ? (
-                            <button
-                              onClick={() => handleDeleteComment(com.idComment)}
-                              className="mt-3 flex items-center gap-1 text-xs border border-red-500 text-red-500 px-3 py-1
-  hover:bg-red-500 hover:text-black transition-all duration-300"
-                            >
-                              <Pencil size={20} />
-                            </button>
-                          ) : (
-                            <span>NOT</span>
-                          )}
-                        </span>
+                          auth?.role === "Admin") && (
+                          <button
+                            onClick={() => handleDeleteComment(com.idComment)}
+                            className="
+        flex items-center justify-center
+        text-xs border border-red-500 text-red-500 px-2 py-1
+        hover:bg-red-500 hover:text-black transition-all duration-300
+      "
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+
+                        {auth.idUser === com.user?.idUser && (
+                          <button
+                            onClick={() => {
+                              setSelectComment(com);
+                              reset({ comment: com.comment });
+                              setShowEditModal(true);
+                            }}
+                            className="
+        flex items-center justify-center
+        text-xs border border-cyan-400 text-cyan-400 px-2 py-1
+        hover:bg-cyan-400 hover:text-black transition-all duration-300
+      "
+                          >
+                            <Pencil size={14} />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -266,6 +292,47 @@ const BlogDetail = () => {
             </div>
           )}
         </div>
+
+        {/* MODAL PARA EDITAR */}
+        {showEditModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div className="bg-zinc-900 border border-zinc-700 p-6 w-full max-w-lg">
+              <h3 className="text-amber-400 text-sm mb-4 tracking-wide">
+                EDIT_COMMENT
+              </h3>
+
+              <form
+                onSubmit={handleSubmit((data) => handleUpdateCommet(data))}
+                className="flex flex-col gap-3"
+              >
+                <textarea
+                  {...register("comment")}
+                  rows={4}
+                  className="bg-zinc-800 border border-zinc-700 text-zinc-300 p-3 text-sm 
+          focus:outline-none focus:border-amber-400 resize-none"
+                />
+
+                <div className="flex justify-end gap-3 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
+                    className="text-zinc-400 text-xs hover:text-white"
+                  >
+                    CANCEL
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="border border-amber-400 text-amber-400 px-4 py-1 text-xs
+            hover:bg-amber-400 hover:text-black transition-all duration-300"
+                  >
+                    UPDATE
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* FOOTER */}
         <div className="mt-10 text-xs text-zinc-600 border-t border-zinc-800 pt-4">
