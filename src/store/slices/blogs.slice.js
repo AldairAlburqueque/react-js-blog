@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import config from "../../utils/getConfig";
+import axiosInstance from "../../utils/axiosConfig";
 import { API_URL } from "../../utils/url";
 
 const blogSlice = createSlice({
@@ -18,37 +17,27 @@ export const getAllBlogThunk = (id) => (dispatch) => {
   let url;
 
   if (!id) {
-    url = `http://localhost:8080/blog/list`;
+    url = `${API_URL}/blog/list`;
   } else {
-    url = `http://localhost:8080/blog/category/${id}`;
+    url = `${API_URL}/blog/category/${id}`;
   }
-  axios
-    .get(url, config())
+
+  axiosInstance
+    .get(url)
     .then((res) => dispatch(setBlogs(res.data)))
     .catch((err) => console.log(err));
 };
 
 export const getMyBlogThunk = () => (dispatch) => {
-  const url = `${API_URL}/blog/me`;
-  axios
-    .get(url, config())
+  axiosInstance
+    .get(`${API_URL}/blog/me`)
     .then((res) => dispatch(setBlogs(res.data)))
     .catch((err) => console.log(err));
 };
 
 export const searchBlogThunk = (title) => (dispatch) => {
-  const url = `${API_URL}/blog/search?title=${title}`;
-
-  axios
-    .get(url, config())
+  axiosInstance
+    .get(`${API_URL}/blog/search?title=${title}`)
     .then((res) => dispatch(setBlogs(res.data)))
     .catch((err) => console.log(err));
 };
-
-// export const blogIdThunk = (id) => (dispatch) => {
-//   const url = `${API_URL}/blog/${id}`;
-//   axios
-//     .get(url, config())
-//     .then((res) => dispatch(setBlogs(res.data)))
-//     .catch((err) => console.log(err));
-// };

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Trash2, Pencil } from "lucide-react";
 
 import Swal from "sweetalert2";
+import axiosInstance from "../utils/axiosConfig";
 
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
@@ -24,7 +25,7 @@ const BlogDetail = () => {
 
   useEffect(() => {
     const url = `${API_URL}/blog/${id}`;
-    axios
+    axiosInstance
       .get(url, config())
       .then((res) => setBlog(res.data))
       .catch((err) => console.log(err));
@@ -37,7 +38,7 @@ const BlogDetail = () => {
       ...data,
       blogId: blog.idBlog,
     };
-    axios
+    axiosInstance
       .post(url, body, config())
       .then((res) => {
         setBlog((prev) => ({
@@ -73,7 +74,7 @@ const BlogDetail = () => {
 
     const url = `${API_URL}/comments/delete/${commentId}`;
 
-    axios
+    axiosInstance
       .delete(url, config())
       .then(() => {
         setBlog((prev) => ({
@@ -86,7 +87,7 @@ const BlogDetail = () => {
 
   const handleUpdateCommet = (data) => {
     const url = `${API_URL}/comments/update/${selectComment.idComment}`;
-    axios
+    axiosInstance
       .put(url, data, config())
       .then((res) => {
         setBlog((prev) => ({
