@@ -6,6 +6,7 @@ import defaultValues from "../utils/defaultValues";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/auth.slice";
+import axiosInstance from "../utils/axiosConfig";
 
 const LoginPage = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -17,10 +18,9 @@ const LoginPage = () => {
 
   const submit = (data) => {
     const url = `${API_URL}/auth/login`;
-    axios
+    axiosInstance
       .post(url, data)
       .then((res) => {
-        console.log(res.data);
         setToken(res.data.token);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("name", res.data.name);
