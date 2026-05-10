@@ -2,12 +2,14 @@
 import axios from "axios";
 import { API_URL } from "./url";
 import { logout } from "../store/slices/auth.slice";
+import Swal from "sweetalert2";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
 });
+
+let isRedirecting = false;
 let isInterceptorSet = false;
-// No importamos store aquí, solo exportamos la instancia y una función de configuración
 
 export const setupAxiosInterceptors = (store) => {
   if (isInterceptorSet) return;
@@ -43,9 +45,18 @@ export const setupAxiosInterceptors = (store) => {
 
         store.dispatch(logout());
 
-        alert("Tu sesión ha caducado. Por favor inicia sesión nuevamente.");
-
-        window.location.replace("/auth/login");
+        Swal.fire({
+          icon: "error",
+          title: "Sesión expirada",
+          text: "Tu sesión ha caducado. Por favor inicia sesión nuevamente.",
+          confirmButtonColor: "#f59e0b",
+          background: "#18181b",
+          color: "#e4e4e7",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        }).then(() => {
+          window.location.replace("/auth/login");
+        });
       }
 
       return Promise.reject(error);

@@ -15,19 +15,13 @@ const RegisterPage = () => {
       const url = `${API_URL}/auth/save`;
       const res = await axios.post(url, data);
 
-      console.log(res.data);
-
       reset(defaultValues);
-      navigate("auth/login");
+
+      navigate("/auth/login");
     } catch (err) {
       console.error("Error al registrar:", err.response?.data || err.message);
     }
   };
-
-  // const roles = [
-  //   { idRol: 1, rol: "Admin" },
-  //   { idRol: 2, rol: "User" },
-  // ];
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center font-mono px-4">
