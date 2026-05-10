@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/auth.slice";
 import axios from "axios";
 import { searchBlogThunk, getAllBlogThunk } from "../store/slices/blogs.slice";
+import axiosInstance from "../utils/axiosConfig";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
@@ -15,7 +16,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    axios
+    axiosInstance
       .get("http://localhost:8080/category/list")
       .then((res) => setCategory(res.data))
       .catch((err) => console.log(err));

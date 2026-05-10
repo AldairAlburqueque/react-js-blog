@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../utils/axiosConfig";
 import { API_URL } from "../../utils/url";
+import axios from "axios";
 
 const blogSlice = createSlice({
   name: "blogs",

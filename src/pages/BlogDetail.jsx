@@ -14,6 +14,11 @@ import axiosInstance from "../utils/axiosConfig";
 const BlogDetail = () => {
   const [blog, setBlog] = useState(null);
   const { register, handleSubmit, reset } = useForm();
+  const {
+    register: editRegister,
+    handleSubmit: editHandleSubmit,
+    reset: editReset,
+  } = useForm();
   const { auth } = useSelector((state) => state);
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -69,20 +74,28 @@ const BlogDetail = () => {
   };
 
   const handleDeleteComment = (commentId) => {
-    const confirmDelete = window.confirm("¿Eliminar comentario?");
-    if (!confirmDelete) return;
+    Swal.fire({
+      title: "¿Quieres eliminar el comentario?",
+      text: "No podrás revertir esto",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = `${API_URL}/comments/delete/${commentId}`;
 
-    const url = `${API_URL}/comments/delete/${commentId}`;
-
-    axiosInstance
-      .delete(url, config())
-      .then(() => {
-        setBlog((prev) => ({
-          ...prev,
-          comments: prev.comments.filter((c) => c.idComment !== commentId),
-        }));
-      })
-      .catch((err) => console.log(err));
+        axiosInstance
+          .delete(url, config())
+          .then(() => {
+            setBlog((prev) => ({
+              ...prev,
+              comments: prev.comments.filter((c) => c.idComment !== commentId),
+            }));
+          })
+          .catch((err) => console.log(err));
+      }
+    });
   };
 
   const handleUpdateCommet = (data) => {
@@ -273,7 +286,7 @@ const BlogDetail = () => {
                           <button
                             onClick={() => {
                               setSelectComment(com);
-                              reset({ comment: com.comment });
+                              editReset({ comment: com.comment });
                               setShowEditModal(true);
                             }}
                             className="
@@ -303,11 +316,11 @@ const BlogDetail = () => {
               </h3>
 
               <form
-                onSubmit={handleSubmit((data) => handleUpdateCommet(data))}
+                onSubmit={editHandleSubmit((data) => handleUpdateCommet(data))}
                 className="flex flex-col gap-3"
               >
                 <textarea
-                  {...register("comment")}
+                  {...editRegister("comment")}
                   rows={4}
                   className="bg-zinc-800 border border-zinc-700 text-zinc-300 p-3 text-sm 
           focus:outline-none focus:border-amber-400 resize-none"
