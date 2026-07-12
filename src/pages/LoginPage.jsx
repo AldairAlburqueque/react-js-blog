@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/auth.slice";
 import axiosInstance from "../utils/axiosConfig";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -40,8 +41,16 @@ const LoginPage = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         localStorage.clear();
+
+        Swal.fire({
+          icon: "error",
+          title: "Credenciales incorrectas",
+          text: "El correo o la contraseña son incorrectos.",
+          confirmButtonColor: "#f59e0b",
+          background: "#18181b",
+          color: "#e4e4e7",
+        });
       });
 
     reset(defaultValues);

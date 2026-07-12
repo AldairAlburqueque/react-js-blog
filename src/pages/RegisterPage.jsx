@@ -20,6 +20,12 @@ const RegisterPage = () => {
       navigate("/auth/login");
     } catch (err) {
       console.error("Error al registrar:", err.response?.data || err.message);
+
+      Swal.fire({
+        icon: "error",
+        title: "No se pudo crear la cuenta",
+        text: "Revisa la información ingresada.",
+      });
     }
   };
 
