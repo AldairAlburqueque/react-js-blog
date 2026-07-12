@@ -16,44 +16,48 @@ export const setupAxiosInterceptors = (store) => {
 
   isInterceptorSet = true;
 
-  axiosInstance.interceptors.request.use(
-    (config) => {
-      const token = localStorage.getItem("token");
-
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-
+  axiosInstance.interceptors.request.use((config) => {
+    if (
+      config.url.includes("/auth/login") ||
+      config.url.includes("/auth/save")
+    ) {
       return config;
-    },
-    (error) => Promise.reject(error),
-  );
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  });
 
   axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
+      const url = error.config?.url || "";
+
+      // Ignorar errores del login y registro
+      if (url.includes("/auth/login") || url.includes("/auth/save")) {
+        return Promise.reject(error);
+      }
+
       if (
         (error.response?.status === 401 || error.response?.status === 403) &&
         !isRedirecting
       ) {
         isRedirecting = true;
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("name");
-        localStorage.removeItem("role");
-        localStorage.removeItem("idUser");
-
         store.dispatch(logout());
 
         Swal.fire({
-          icon: "error",
+          icon: "warning",
           title: "Sesión expirada",
-          text: "Tu sesión ha caducado. Por favor inicia sesión nuevamente.",
+          text: "Tu sesión ha expirado. Inicia sesión nuevamente.",
           confirmButtonColor: "#f59e0b",
           background: "#18181b",
           color: "#e4e4e7",
-          allowOutsideClick: false,
-          allowEscapeKey: false,
         }).then(() => {
           window.location.replace("/auth/login");
         });
