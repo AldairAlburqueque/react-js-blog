@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import defaultValues from "../utils/defaultValues";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../utils/url";
+import Swal from "sweetalert2";
 
 const RegisterPage = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -85,21 +86,6 @@ const RegisterPage = () => {
                        text-zinc-200 p-2 
                        focus:outline-none focus:border-amber-400"
             />
-          </div>
-
-          {/* Role */}
-          <div className="flex flex-col">
-            <label className="text-zinc-400 text-xs mb-1">ROLE</label>
-            <select
-              {...register("rolId")}
-              className="bg-zinc-800 border border-zinc-700 
-               text-zinc-200 p-2 
-               focus:outline-none focus:border-amber-400"
-            >
-              <option value="">-- SELECT ROLE --</option>
-              <option value="1">ADMIN</option>
-              <option value="2">USER</option>
-            </select>
           </div>
 
           {/* Botón */}
